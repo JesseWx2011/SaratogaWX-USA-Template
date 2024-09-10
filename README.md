@@ -11,3 +11,4 @@
    <p>The Visual Crossing API Key is provided by default.</p>
 
 <h1>Previews</h1>
+ <img alt="Preview One: Home Page:" src="./preview-images/preview0.png" width="100%">
