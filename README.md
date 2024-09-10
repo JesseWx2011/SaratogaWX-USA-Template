@@ -1,5 +1,5 @@
 # SaratogaWX-USA-Template
-<h1>This Project is under development.</h1>
+<h2>This Project is under development.</h2>
  <h1><b>DISCLAIMER:</b></h1>
 
  <p>This Template relies heavily on several API Systems, including Wunderground, NWS, and several more. If one of these API's are down, Wunderground for example: Weather Conditions may be unavaliable.</p>
