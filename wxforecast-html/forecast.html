@@ -1,0 +1,365 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<meta name="description" content="Personal weather station.">
+<script type="text/javascript" src="./js/pws.js"></script>
+<script type="text/javascript" src="./js/wxforecastconfig.js"></script>
+<script type="text/javascript" src="./js/wxforecast.js"></script>
+<script type="text/javascript" src="./js/nwsforecast.js"></script>
+
+<div id="styleconfig">
+    <link rel="stylesheet" type="text/css" href="./css/weather-screen-blue-narrow.css" media="screen" title="screen">
+</div>
+<link rel="stylesheet" type="text/css" href="./css/weather-print-php.css" media="print">
+<title>USA Website with PHP &amp; AJAX - Home</title>
+
+<style type="text/css">
+    /* ================================================================
+This copyright notice must be untouched at all times.
+
+The original version of this stylesheet and the associated (x)html
+is available at http://www.cssplay.co.uk/menus/flyout_4level.html
+Copyright (c) 2005-2007 Stu Nicholls. All rights reserved.
+This stylesheet and the associated (x)html may be modified in any
+way to fit your requirements.
+Modified by Ken True and Mike Challis for Weather-Display/AJAX/PHP
+template set.
+=================================================================== */
+    .flyoutmenu {
+        font-size: 90%;
+    }
+
+    /* remove all the bullets, borders and padding from the default list styling */
+    .flyoutmenu ul {
+        position: relative;
+        z-index: 500;
+        padding: 0;
+        margin: 0;
+        padding-left: 4px;
+        /* mchallis added to center links in firefox */
+        list-style-type: none;
+        width: 110px;
+    }
+
+    /* style the list items */
+    .flyoutmenu li {
+        color: #336699;
+        background: white url(./images/flyout-shade-white.gif);
+        /* for IE7 */
+        float: left;
+        margin: 0;
+        /* mchallis added to tighten gaps between links */
+    }
+
+    .flyoutmenu li.sub {
+        background: white url(./images/flyout-sub.gif) no-repeat right center;
+    }
+
+    /* get rid of the table */
+    .flyoutmenu table {
+        position: absolute;
+        border-collapse: collapse;
+        top: 0;
+        left: 0;
+        z-index: 100;
+        font-size: 1em;
+    }
+
+    /* style the links */
+    .flyoutmenu a,
+    .flyoutmenu a:visited {
+        display: block;
+        text-decoration: none;
+        line-height: 1.8em;
+        width: 95px;
+        /* mchallis changed for adjusting firefox link width */
+        color: #336699;
+        padding: 0 2px 0 5px;
+        border: 1px solid black;
+        border-width: 0 1px 1px 1px;
+    }
+
+    /* hack for IE5.5 */
+    /* mchallis lowered the two width values to (101, 100)to fix IE6 links wider than menu width */
+    * html .flyoutmenu a,
+    * html .flyoutmenu a:visited {
+        width: 95px;
+        width: 94px;
+    }
+
+    /* style the link hover */
+    * html .flyoutmenu a:hover {
+        color: white;
+        background: #3173B1;
+        position: relative;
+    }
+
+    .flyoutmenu li:hover {
+        position: relative;
+    }
+
+    /* For accessibility of the top level menu when tabbing */
+    .flyoutmenu a:active,
+    .flyoutmenu a:focus {
+        color: white;
+        background: #3173B1;
+    }
+
+    /* retain the hover colors for each sublevel IE7 and Firefox etc */
+    .flyoutmenu li:hover>a {
+        color: white;
+        background: #3173B1;
+    }
+
+    /* hide the sub levels and give them a positon absolute so that they take up no room */
+    .flyoutmenu li ul {
+        visibility: hidden;
+        position: absolute;
+        top: -10px;
+        /* set up the overlap (minus the overrun) */
+        left: 90px;
+        /* set up the overrun area */
+        padding: 10px;
+        /* this is for IE to make it interpret the overrrun padding */
+        background: transparent url(./images/flyout-transparent.gif);
+    }
+
+    /* for browsers that understand this is all you need for the flyouts */
+    .flyoutmenu li:hover>ul {
+        visibility: visible;
+    }
+
+
+    /* for IE5.5 and IE6 you need to style each level hover */
+
+    /* keep the third level+ hidden when you hover on first level link */
+    .flyoutmenu ul a:hover ul ul {
+        visibility: hidden;
+    }
+
+    /* keep the fourth level+ hidden when you hover on second level link */
+    .flyoutmenu ul a:hover ul a:hover ul ul {
+        visibility: hidden;
+    }
+
+    /* keep the fifth level hidden when you hover on third level link */
+    .flyoutmenu ul a:hover ul a:hover ul a:hover ul ul {
+        visibility: hidden;
+    }
+
+    /* make the second level visible when hover on first level link */
+    .flyoutmenu ul a:hover ul {
+        visibility: visible;
+    }
+
+    /* make the third level visible when you hover over second level link */
+    .flyoutmenu ul a:hover ul a:hover ul {
+        visibility: visible;
+    }
+
+    /* make the fourth level visible when you hover over third level link */
+    .flyoutmenu ul a:hover ul a:hover ul a:hover ul {
+        visibility: visible;
+    }
+
+    /* make the fifth level visible when you hover over fourth level link */
+    .flyoutmenu ul a:hover ul a:hover ul a:hover ul a:hover ul {
+        visibility: visible;
+    }
+</style>
+</head>
+<body>
+    <div id="main-copy">
+        <table style="width: 620px; border: none;">
+            <tr style="text-align: center;">
+                <td><b>National Weather Service Forecast for: </b><span style="color: green;"
+                        id="nwsForecastLocation"> Monte Sereno, CA</span><br />
+                    <div id="nwsOffice">Issued by: National Weather Service San Francisco Bay Area/Monterey, CA
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: center" id="wxForecastUpdated">Updated: Thu, 15-Aug-2024 12:37pm PDT </td>
+            </tr>
+            <tr align="center">
+                <td style="font-size: 14px; font-family: Arial, Helvetica, sans-serif">
+                </td>
+            </tr>
+            <tr>
+                <td style="text-align: center; font-size: 18px; margin: 0px auto;"><b id="ajaxnwscityname">Los Gatos</b></td>
+            </tr>
+            <tr>
+                <td align="center">&nbsp;
+                    <table style="width: 620px; border: none; border-collapse: collapse; border-spacing: 2px;">
+                        <tr>
+                            <td style="width: 65px; text-align: center; vertical-align: top;"><strong
+                                    id="nwsdayname0">This Afternoon</strong>
+                                <div class="icon" id="wxForecastIcon0"></div>
+                                <div id="wxCondition0">Sunny</div>
+                            </td>
+                            <td style="width: 65px; text-align: center; vertical-align: top;"><strong id="nwsdayname2">Friday<br /><br /></strong><div id="wxForecastIcon2"></div><div id="wxCondition2">Sunny</div></td>
+                            <td style="width: 65px; text-align: center; vertical-align: top;"><strong id="nwsdayname4">Saturday<br /><br /></strong><div id="wxForecastIcon4"></div><div id="wxCondition4">Patchy Fog then Mostly Sunny</div></td>
+                            <td style="width: 65px; text-align: center; vertical-align: top;">
+                                <strong id="nwsdayname6">Sunday</strong><div id="wxForecastIcon6"></div><div id="wxCondition6">Patchy Fog then Sunny </div></td>
+                            <td style="width: 65px; text-align: center; vertical-align: top;">
+                                <strong id="nwsdayname8">Monday<br /><br /></strong><div id="wxForecastIcon8"></div><div id="wxCondition8">Sunny </div></td>
+                            <td style="width: 65px; text-align: center; vertical-align: top;">
+                                <strong id="nwsdayname10">Tuesday<br /><br /></strong><div id="wxForecastIcon10"></div><div id="wxCondition10">Sunny </div></td>
+                            <td style="width: 65px; text-align: center; vertical-align: top;">
+                                <strong id="nwsdayname12">Wednesday<br /><br /></strong><div id="wxForecastIcon12"></div><div id="wxCondition12">Sunny </div></td>
+                            <td style="width: 65px; text-align: center; vertical-align: top;">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 65px; text-align: center; vertical-align: top;">Hi <span id="hi0" style="color: #FF0000;">85 &deg;F</span></td>
+                            <td style="width: 65px; text-align: center; vertical-align: top;">Hi <span id="hi1" style="color: #FF0000;">87 &deg;F</span></td>
+                            <td style="width: 65px; text-align: center; vertical-align: top;">Hi <span id="hi2" style="color: #FF0000;">84 &deg;F</span></td>
+                            <td style="width: 65px; text-align: center; vertical-align: top;">Hi <span id="hi3" style="color: #FF0000;">84 &deg;F</span></td>
+                            <td style="width: 65px; text-align: center; vertical-align: top;">Hi <span id="hi4" style="color: #FF0000;">86 &deg;F</span></td>
+                            <td style="width: 65px; text-align: center; vertical-align: top;">Hi <span id="hi5" style="color: #FF0000;">89 &deg;F</span></td>
+                            <td style="width: 65px; text-align: center; vertical-align: top;">Hi <span id="hi6" style="color: #FF0000;">89 &deg;F</span></td>
+                            <td style="width: 65px; text-align: center; vertical-align: top;">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td colspan="8">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 65px; text-align: center; vertical-align: top;">
+                                <strong id="nwsdayname1">Tonight<br /><br /></strong><div style="width: 56px;" id="wxForecastIcon1"></div><div id="wxCondition1">Mostly Clear </div></td>
+                            <td style="width: 65px; text-align: center; vertical-align: top;">
+                                <strong id="nwsdayname3">Friday<br />Night<br /></strong><div id="wxForecastIcon3"></div><div id="wxCondition3">Mostly Clear then Patchy Fog </div></td>
+                            <td style="width: 65px; text-align: center; vertical-align: top;">
+                                <strong id="nwsdayname5">Saturday<br />Night<br /></strong><div id="wxForecastIcon5"></div><div id="wxCondition5">Areas Of Fog </div></td>
+                            <td style="width: 65px; text-align: center; vertical-align: top;">
+                                <strong id="nwsdayname7">Sunday</strong><div id="wxForecastIcon7"></div><div id="wxCondition7">Mostly Clear</div></td>
+                            <td style="width: 65px; text-align: center; vertical-align: top;">
+                                <strong id="nwsdayname9">Monday Night</strong><div id="wxForecastIcon9"></div><div id="wxCondition9">Mostly Clear  </div></td>
+                            <td style="width: 65px; text-align: center; vertical-align: top;">
+                                <strong id="nwsdayname11">Tuesday<br />Night<br /></strong><div id="wxForecastIcon11"></div><div id="wxCondition11">Mostly Clear </div></td>
+                            <td style="width: 65px; text-align: center; vertical-align: top;">
+                                <strong id="nwsdayname13">Wednesday<br />Night<br /></strong><div id="wxForecastIcon13"></div><div id="wxCondition13">Mostly Clear</div></td>
+                            <td style="width: 65px; text-align: center; vertical-align: top;">&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 65px; text-align: center; vertical-align: top;">Lo <span id="low0" style="color: #0000FF;">56 &deg;F</span></td>
+                            <td style="width: 65px; text-align: center; vertical-align: top;">Lo <span id="low1" style="color: #0000FF;">57 &deg;F</span></td>
+                            <td style="width: 65px; text-align: center; vertical-align: top;">Lo <span id="low2" style="color: #0000FF;">57 &deg;F</span></td>
+                            <td style="width: 65px; text-align: center; vertical-align: top;">Lo <span id="low3" style="color: #0000FF;">54 &deg;F</span></td>
+                            <td style="width: 65px; text-align: center; vertical-align: top;">Lo <span id="low4" style="color: #0000FF;">55 &deg;F</span></td>
+                            <td style="width: 65px; text-align: center; vertical-align: top;">Lo <span id="low5" style="color: #0000FF;">58 &deg;F</span></td>
+                            <td style="width: 65px; text-align: center; vertical-align: top;">Lo <span id="low6" style="color: #0000FF;">57 &deg;F</span></td>
+                            <td style="width: 65px; text-align: center; vertical-align: top;">&nbsp;</td>
+                        </tr>
+                    </table>
+
+                </td>
+            </tr>
+        </table>
+        <p>&nbsp;</p>
+
+        <table style="width: 620px; border: none; border-collapse: collapse; border-spacing: 2px;">
+            <tr>
+                <td style="width: 20%; text-align: left; vertical-align: top;" id="wxForecastName0"><b>This
+                        Afternoon</b><br />&nbsp;<br /></td>
+                <td style="width: 80%; text-align: left; vertical-align: top;" id="wxForecast0">Sunny, with a high
+                    near 85. North northwest wind around 9 mph, with gusts as high as 18 mph.</td>
+            </tr>
+            <tr>
+                <td style="width: 20%; text-align: left; vertical-align: top;" id='wxForecastName1'>
+                    <b>Tonight</b><br />&nbsp;<br /></td>
+                <td style="width: 80%; text-align: left; vertical-align: top;" id="wxForecast1">Mostly clear, with a
+                    low around 56. North northwest wind 2 to 9 mph.</td>
+            </tr>
+            <tr>
+                <td style="width: 20%; text-align: left; vertical-align: top;" id="wxForecastName2">
+                    <b>Friday</b><br />&nbsp;<br /></td>
+                <td style="width: 80%; text-align: left; vertical-align: top;" id="wxForecast2">Sunny. High near 87,
+                    with temperatures falling to around 84 in the afternoon. North wind 2 to 8 mph.</td>
+            </tr>
+            <tr>
+                <td style="width: 20%; text-align: left; vertical-align: top;" id="wxForecastName3"><b>Friday
+                        Night</b><br />&nbsp;<br /></td>
+                <td style="width: 80%; text-align: left; vertical-align: top;" id="wxForecast3">Patchy fog after
+                    3am. Mostly clear, with a low around 57. Northwest wind 1 to 7 mph.</td>
+            </tr>
+            <tr>
+                <td style="width: 20%; text-align: left; vertical-align: top;" id="wxForecastName4">
+                    <b>Saturday</b><br />&nbsp;<br /></td>
+                <td style="width: 80%; text-align: left; vertical-align: top;" id="wxForecast4">Patchy fog before
+                    8am. Mostly sunny, with a high near 84. West northwest wind 2 to 9 mph.</td>
+            </tr>
+            <tr>
+                <td style="width: 20%; text-align: left; vertical-align: top;" id="wxForecastName5"><b>Saturday
+                        Night</b><br />&nbsp;<br /></td>
+                <td style="width: 80%; text-align: left; vertical-align: top;" id="wxForecast5">Areas of fog after
+                    11pm. Partly cloudy, with a low around 57.</td>
+            </tr>
+            <tr>
+                <td style="width: 20%; text-align: left; vertical-align: top;" id="wxForecastName6">
+                    <b>Sunday</b><br />&nbsp;<br /></td>
+                <td style="width: 80%; text-align: left; vertical-align: top;" id="wxForecast6">Patchy fog before
+                    8am. Sunny, with a high near 84.</td>
+            </tr>
+            <tr>
+                <td style="width: 20%; text-align: left; vertical-align: top;" id="wxForecastName7"><b>Sunday
+                        Night</b><br />&nbsp;<br /></td>
+                <td style="width: 80%; text-align: left; vertical-align: top;" id="wxForecast7">Mostly clear, with a
+                    low around 54.</td>
+            </tr>
+            <tr>
+                <td style="width: 20%; text-align: left; vertical-align: top;" id="wxForecastName8">
+                    <b>Monday</b><br />&nbsp;<br /></td>
+                <td style="width: 80%; text-align: left; vertical-align: top;" id="wxForecast8">Sunny, with a high
+                    near 86.</td>
+            </tr>
+            <tr>
+                <td style="width: 20%; text-align: left; vertical-align: top;" id="wxForecastName9"><b>Monday
+                        Night</b><br />&nbsp;<br /></td>
+                <td style="width: 80%; text-align: left; vertical-align: top;" id="wxForecast9">Mostly clear, with a
+                    low around 55.</td>
+            </tr>
+            <tr>
+                <td style="width: 20%; text-align: left; vertical-align: top;" id="wxForecastName10">
+                    <b>Tuesday</b><br />&nbsp;<br /></td>
+                <td style="width: 80%; text-align: left; vertical-align: top;" id="wxForecast10">Sunny, with a high
+                    near 89.</td>
+            </tr>
+            <tr>
+                <td style="width: 20%; text-align: left; vertical-align: top;" id="wxForecastName11"><b>Tuesday
+                        Night</b><br />&nbsp;<br /></td>
+                <td style="width: 80%; text-align: left; vertical-align: top;" id="wxForecast11">Mostly clear, with
+                    a low around 58.</td>
+            </tr>
+            <tr>
+                <td style="width: 20%; text-align: left; vertical-align: top;" id="wxForecastName12">
+                    <b>Wednesday</b><br />&nbsp;<br /></td>
+                <td style="width: 80%; text-align: left; vertical-align: top;" id="wxForecast12">Sunny, with a high near 89.</td>
+            </tr>
+            <tr>
+                <td style="width: 20%; text-align: left; vertical-align: top;" id="wxForecastName13"><b>Wednesday Night</b><br />&nbsp;<br /></td>
+                <td style="width: 80%; text-align: left; vertical-align: top;" id="wxForecast13">Mostly clear, with a low around 57.</td>
+            </tr>
+        </table>
+
+        <p>&nbsp;</p>
+        <p id="wxForecastUrl">Forecast from <a
+                href="https://forecast.weather.gov/MapClick.php?lat=37.2267&amp;lon=-121.974&amp;unit=0&amp;lg=english">NOAA-NWS</a>for
+            Monte Sereno, CA. </p>
+
+    </div>
+</body>
+<script>
+     function Configuration() {
+        year = new Date().getFullYear()
+        month = new Date().getMonth() + 1
+        day = new Date().getDate()
+
+
+        if (day <= 9) {
+            day = `0${day}`
+        } else {
+            day = day + 10
+        }
+        document.getElementById("ajaxnwscityname").innerHTML = "Milton"
+
+    }
+    Configuration()
+</script>
