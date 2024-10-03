@@ -13,3 +13,7 @@
 <p>Duplicate "wxnewpage.php"</p>
 
 <p>Insert *<iframe style="width: -webkit-fill-available;height: 1438px;" src="./forecast.html"> in "main-copy"</p>
+
+<h1>If you set it up correctly, it should look like this:</h1>
+
+<img src="../preview-images/wxforecasthtml v1 Patch 1.jpeg">
