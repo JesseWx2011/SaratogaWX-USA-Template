@@ -12,4 +12,4 @@
 
 <p>Duplicate "wxnewpage.php"</p>
 
-<p>Insert *<iframe style="width: 756px; height: 920px;" src="./forecast.html"></iframe> in "main-copy"</p>
+<p>Insert *<iframe style="width: -webkit-fill-available;height: 1438px;" src="./forecast.html"> in "main-copy"</p>
